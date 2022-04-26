@@ -9,4 +9,5 @@ public class RandomEvents : ScriptableObject
     public float HabitationValue;
     public float FoodValue;
     public float JoyValue;
+    public string EventName;
 }

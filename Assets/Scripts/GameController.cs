@@ -18,12 +18,15 @@ public sealed class GameController : MonoBehaviour
     public float FoodMeter { get; private set; } = 10.0f;
     public float JoyMeter { get; private set; } = 10.0f;
 
-    public List<RandomEvents> PossibleEventsList = new List<RandomEvents>();
-    public List<RandomEvents> EventsList = new List<RandomEvents>();
+    public List<RandomEvents> EventPool = new List<RandomEvents>();
 
-    private GameState GameState = GameState.TransitionState;
+    private List<RandomEvents> _eventsList = new List<RandomEvents>();
+    private GameState _gameState = GameState.TransitionState;
 
     private float _innerTimer;
+
+    //TODO : Multiple events possible being chosen in the event pool
+    //TODO : Incorporate in the EventState (exponentially increases the number of event ?)
 
     private void Awake()
     {
@@ -39,24 +42,53 @@ public sealed class GameController : MonoBehaviour
 
     private void Start()
     {
-
+        
     }
 
     private void Update()
     {
-        switch (GameState)
+        if (_innerTimer < 0)
+        {
+            ++_gameState;
+            if (_gameState > (GameState)2)
+                _gameState = GameState.TransitionState;
+            UpdateGameState();
+        }
+        
+        _innerTimer -= Time.deltaTime;
+    }
+
+    private void UpdateGameState()
+    {
+        switch (_gameState)
         {
             case GameState.TransitionState:
+            {
+                Debug.Log("Entering Transition state");
+                _innerTimer = 5.0f;
                 break;
+            }
             case GameState.EventState:
-                break;
-            case GameState.AnswerState:
-                break;
-            default:
-                Debug.Log("Default Resolution of the game state");
-                break;
-        }
+            {
+                Debug.Log("Entering Event state");
 
-        _innerTimer += Time.deltaTime;
+                int rand = Random.Range(0, EventPool.Count);
+                _eventsList.Add(EventPool[rand]);
+                Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName);
+                break;
+            }
+            case GameState.AnswerState:
+            {
+                Debug.Log("Entering Answer state");
+                _innerTimer = 5.0f;
+                break;
+            }
+            default:
+            {
+                Debug.Log("Default Resolution of the game state");
+
+                break;
+            }
+        }
     }
 }
