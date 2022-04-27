@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -14,19 +16,34 @@ public sealed class GameController : MonoBehaviour
 {
     public static GameController Instance;
 
-    public float HabitationMeter { get; private set; } = 10.0f;
-    public float FoodMeter { get; private set; } = 10.0f;
-    public float JoyMeter { get; private set; } = 10.0f;
+
+    public float HabitationMeter { get; private set; }
+    public float FoodMeter { get; private set; }
+    public float JoyMeter { get; private set; }
 
     public List<RandomEvents> EventPool = new List<RandomEvents>();
 
     private List<RandomEvents> _eventsList = new List<RandomEvents>();
+
     private GameState _gameState = GameState.TransitionState;
 
-    private float _innerTimer;
+    [SerializeField] private float _habitationMax = 10.0f;
+    [SerializeField] private float _foodMax = 10.0f;
+    [SerializeField] private float _joyMax = 10.0f;
+    [SerializeField] private float _joyLoseRatio = 0.0f;
+    [SerializeField] private float _foodGainRatio = 0.0f;
+    [SerializeField] private float _HabitationGainRatio = 0.0f;
 
-    //TODO : Multiple events possible being chosen in the event pool
-    //TODO : Incorporate in the EventState (exponentially increases the number of event ?)
+    [SerializeField] private Slider _sliderFood;
+    [SerializeField] private Slider _sliderHabitation;
+    [SerializeField] private Slider _sliderJoy;
+
+    [SerializeField] private float _advancementFactor = 0.2f;
+
+    private float _advancementValue = 1.0f;
+    private float _innerTimer;
+    private bool _isFoodDepleting = false;
+    private bool _isHabitationDepleting = false;
 
     private void Awake()
     {
@@ -42,7 +59,9 @@ public sealed class GameController : MonoBehaviour
 
     private void Start()
     {
-        
+        HabitationMeter = _habitationMax / 2.0f;
+        FoodMeter = _foodMax / 2.0f;
+        JoyMeter = _joyMax / 2.0f;
     }
 
     private void Update()
@@ -56,6 +75,41 @@ public sealed class GameController : MonoBehaviour
         }
         
         _innerTimer -= Time.deltaTime;
+
+        float precedentFoodMeter = FoodMeter;
+        float precedentHabitationMeter = FoodMeter;
+        
+        for (int i = 0; i < _eventsList.Count; i++)
+        {
+            FoodMeter -= _eventsList[i].FoodValue * Time.deltaTime;
+            HabitationMeter -= _eventsList[i].HabitationValue * Time.deltaTime;
+        }
+
+        if (precedentFoodMeter != FoodMeter)
+            _isFoodDepleting = true;
+        else
+            _isFoodDepleting = false;
+
+        if (precedentHabitationMeter != HabitationMeter)
+            _isHabitationDepleting = true;
+        else
+            _isHabitationDepleting = false;
+
+        if (!_isFoodDepleting)
+        {
+            FoodMeter += _foodGainRatio * Time.deltaTime;
+        }
+
+        if (!_isHabitationDepleting)
+        {
+            HabitationMeter += _HabitationGainRatio * Time.deltaTime;
+        }
+
+        JoyMeter -= _joyLoseRatio * Time.deltaTime;
+
+        _sliderFood.value = FoodMeter / _foodMax;
+        _sliderHabitation.value = HabitationMeter / _habitationMax;
+        _sliderJoy.value = JoyMeter / _joyMax;
     }
 
     private void UpdateGameState()
@@ -65,6 +119,8 @@ public sealed class GameController : MonoBehaviour
             case GameState.TransitionState:
             {
                 Debug.Log("Entering Transition state");
+                if(_advancementValue < 2)
+                    _advancementValue += _advancementFactor;
                 _innerTimer = 5.0f;
                 break;
             }
@@ -72,9 +128,12 @@ public sealed class GameController : MonoBehaviour
             {
                 Debug.Log("Entering Event state");
 
-                int rand = Random.Range(0, EventPool.Count);
-                _eventsList.Add(EventPool[rand]);
-                Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName);
+                for (int i = 0; i < (int)_advancementValue; ++i)
+                {
+                    int rand = Random.Range(0, EventPool.Count);
+                    _eventsList.Add(EventPool[rand]);
+                    Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName);
+                }
                 break;
             }
             case GameState.AnswerState:
