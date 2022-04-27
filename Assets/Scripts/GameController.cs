@@ -79,7 +79,7 @@ public sealed class GameController : MonoBehaviour
         float precedentFoodMeter = FoodMeter;
         float precedentHabitationMeter = FoodMeter;
         
-        for (int i = 0; i < _eventsList.Count; i++)
+        for (int i = 0; i < _eventsList.Count; ++i)
         {
             FoodMeter -= _eventsList[i].FoodValue * Time.deltaTime;
             HabitationMeter -= _eventsList[i].HabitationValue * Time.deltaTime;
