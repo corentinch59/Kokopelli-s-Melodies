@@ -21,6 +21,7 @@ public sealed class GameController : MonoBehaviour
     public float FoodMeter { get; private set; }
     public float JoyMeter { get; private set; }
 
+    [Header("Lists of Events")]
     public List<RandomEvents> EventPool = new List<RandomEvents>();
     public List<RandomEvents> QuestPool = new List<RandomEvents>();
 
@@ -29,18 +30,20 @@ public sealed class GameController : MonoBehaviour
 
     private GameState _gameState = GameState.TransitionState;
 
+    [Header("Tweak Values")]
     [SerializeField] private float _habitationMax = 10.0f;
     [SerializeField] private float _foodMax = 10.0f;
     [SerializeField] private float _joyMax = 10.0f;
     [SerializeField] private float _joyLoseRatio = 0.0f;
     [SerializeField] private float _foodGainRatio = 0.0f;
     [SerializeField] private float _HabitationGainRatio = 0.0f;
+    [SerializeField] private float _advancementFactor = 0.2f;
 
+    [Header(("UI Elements /!/ GD avoid touching it"))]
     [SerializeField] private Slider _sliderFood;
     [SerializeField] private Slider _sliderHabitation;
     [SerializeField] private Slider _sliderJoy;
 
-    [SerializeField] private float _advancementFactor = 0.2f;
 
     private float _advancementValue = 1.0f;
     private float _innerTimer;
