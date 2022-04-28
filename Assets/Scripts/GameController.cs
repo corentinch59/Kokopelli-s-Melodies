@@ -59,9 +59,46 @@ public sealed class GameController : MonoBehaviour
 
     private void Start()
     {
-        HabitationMeter = _habitationMax / 2.0f;
-        FoodMeter = _foodMax / 2.0f;
-        JoyMeter = _joyMax / 2.0f;
+        HabitationMeter = _habitationMax * 0.75f;
+        FoodMeter = _foodMax * 0.75f;
+        JoyMeter = _joyMax * 0.75f;
+
+        //TODO : Set the Melody of the events dynamically here
+
+        for (int i = 0; i < EventPool.Count; i++)
+        {
+            if (EventPool[i].EventType == EventType.Event)
+            {
+                switch (EventPool[i].IncantationType)
+                {
+                    case IncantationType.Sun:
+                    {
+                        break;
+                    }
+                    case IncantationType.Health:
+                    {
+                        break;
+                    }
+                    case IncantationType.Love:
+                    {
+                        break;
+                    }
+                    case IncantationType.Rain:
+                    {
+                        break;
+                    }
+                    default:
+                    {
+                        Debug.Log("Forgot to set Incantation type of the Event : " + EventPool[i].EventName);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
     }
 
     private void Update()
@@ -132,7 +169,7 @@ public sealed class GameController : MonoBehaviour
                 {
                     int rand = Random.Range(0, EventPool.Count);
                     _eventsList.Add(EventPool[rand]);
-                    Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName);
+                    Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName + " the event melody is " );
                 }
                 break;
             }

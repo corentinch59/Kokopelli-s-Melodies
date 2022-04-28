@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021a4f7c974289e47be5f6ae6732956b, type: 3}
   m_Name: FireEvent
   m_EditorClassIdentifier: 
-  EventDuration: 0
+  EventType: 0
+  IncantationType: 0
   HabitationValue: 0
   FoodValue: 0
-  JoyValue: 0
   EventName: Fire is burning houses !
+  EventMelody: {fileID: 0}
