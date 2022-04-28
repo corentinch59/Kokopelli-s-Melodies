@@ -26,7 +26,7 @@ public class Melody : MonoBehaviour
     private List<char> _loveIncantation = new List<char>();
     private List<char> _healthIncantation = new List<char>();
 
-    public Melody()
+    public Melody(IncantationType incant)
     {
         _rainIncantation.Add(_note5);
         _rainIncantation.Add(_note1);
@@ -44,7 +44,7 @@ public class Melody : MonoBehaviour
         _loveIncantation.Add(_note5);
         _loveIncantation.Add(_note2);
 
-        switch (Incantation)
+        switch (incant)
         {
             case IncantationType.Rain:
             {
@@ -69,7 +69,7 @@ public class Melody : MonoBehaviour
         }
     }
 
-    public bool ValidateInput(List<char> input)
+    public virtual bool ValidateInput(List<char> input)
     {
         if (input.Count != MelodyNotes.Count)
             return false;
@@ -87,10 +87,11 @@ public class Melody : MonoBehaviour
 
     public void ShowMelody()
     {
-        string melody;
+        string melody = " ";
         for (int i = 0; i < MelodyNotes.Count; ++i)
         {
-            //melody 
+            melody += " " + MelodyNotes[i];
         }
+        Debug.Log(melody);
     }
 }

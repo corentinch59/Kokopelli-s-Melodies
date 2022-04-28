@@ -22,8 +22,10 @@ public sealed class GameController : MonoBehaviour
     public float JoyMeter { get; private set; }
 
     public List<RandomEvents> EventPool = new List<RandomEvents>();
+    public List<RandomEvents> QuestPool = new List<RandomEvents>();
 
     private List<RandomEvents> _eventsList = new List<RandomEvents>();
+    private List<RandomEvents> _questsList = new List<RandomEvents>();
 
     private GameState _gameState = GameState.TransitionState;
 
@@ -63,46 +65,50 @@ public sealed class GameController : MonoBehaviour
         FoodMeter = _foodMax * 0.75f;
         JoyMeter = _joyMax * 0.75f;
 
-        //TODO : Set the Melody of the events dynamically here
-
-        for (int i = 0; i < EventPool.Count; i++)
-        {
-            if (EventPool[i].EventType == EventType.Event)
+        for (int i = 0; i < EventPool.Count; ++i)
+        { 
+            switch (EventPool[i].IncantationType)
             {
-                switch (EventPool[i].IncantationType)
+                case IncantationType.Sun:
                 {
-                    case IncantationType.Sun:
-                    {
-                        break;
-                    }
-                    case IncantationType.Health:
-                    {
-                        break;
-                    }
-                    case IncantationType.Love:
-                    {
-                        break;
-                    }
-                    case IncantationType.Rain:
-                    {
-                        break;
-                    }
-                    default:
-                    {
-                        Debug.Log("Forgot to set Incantation type of the Event : " + EventPool[i].EventName);
-                        break;
-                    }
+                    EventPool[i].EventMelody = new Melody(IncantationType.Sun);
+                    break;
+                }
+                case IncantationType.Health:
+                {
+                    EventPool[i].EventMelody = new Melody(IncantationType.Health);
+                    break;
+                }
+                case IncantationType.Love:
+                {
+                    EventPool[i].EventMelody = new Melody(IncantationType.Love);
+                    break;
+                }
+                case IncantationType.Rain:
+                {
+                    EventPool[i].EventMelody = new Melody(IncantationType.Rain);
+                    break;
+                }
+                default:
+                {
+                    Debug.Log("Forgot to set Incantation type of the Event : " + EventPool[i].EventName);
+                    break;
                 }
             }
-            else
-            {
-
-            }
         }
+
+        for (int i = 0; i < QuestPool.Count; ++i)
+        {
+            QuestPool[i].EventMelody = new MelodyQuest(IncantationType.None);
+        }
+
+        PickQuest();
     }
 
     private void Update()
     {
+        // TODO : Input
+
         if (_innerTimer < 0)
         {
             ++_gameState;
@@ -156,7 +162,7 @@ public sealed class GameController : MonoBehaviour
             case GameState.TransitionState:
             {
                 Debug.Log("Entering Transition state");
-                if(_advancementValue < 2)
+                if((int)_advancementValue < 2)
                     _advancementValue += _advancementFactor;
                 _innerTimer = 5.0f;
                 break;
@@ -169,7 +175,8 @@ public sealed class GameController : MonoBehaviour
                 {
                     int rand = Random.Range(0, EventPool.Count);
                     _eventsList.Add(EventPool[rand]);
-                    Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName + " the event melody is " );
+                    Debug.Log("Between " + EventPool.Count + " events, i chose the number " + rand + " " + EventPool[rand].EventName + " the event melody is ");
+                    EventPool[rand].EventMelody.ShowMelody();
                 }
                 break;
             }
@@ -184,6 +191,42 @@ public sealed class GameController : MonoBehaviour
                 Debug.Log("Default Resolution of the game state");
 
                 break;
+            }
+        }
+    }
+
+    public void SetJoyMeter(float value)
+    {
+        JoyMeter += value;
+    }
+
+    public void PickQuest()
+    {
+        int rand = Random.Range(0, QuestPool.Count);
+
+        _questsList.Add(QuestPool[rand]);
+
+        Debug.Log("Pulled Quest from Pool number : " + rand + ", name " + QuestPool[rand].EventName + " melody is : ");
+        QuestPool[rand].EventMelody.ShowMelody();
+    }
+
+    public void DeleteEventFromList(Melody melodyToDelete)
+    {
+        for (int i = 0; i < _eventsList.Count; ++i)
+        {
+            if (_eventsList[i].EventMelody == melodyToDelete)
+            {
+                _eventsList.RemoveAt(i);
+                return;
+            }
+        }
+
+        for (int i = 0; i < _questsList.Count; ++i)
+        {
+            if (_questsList[i].EventMelody == melodyToDelete)
+            {
+                _questsList.RemoveAt(i);
+                return;
             }
         }
     }

@@ -1103,8 +1103,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EventPool:
   - {fileID: 11400000, guid: a5179c94ad6447849b78abc2d3c11c61, type: 2}
-  - {fileID: 11400000, guid: 1d25721e42a150e40a0a04bdbe7fe2d7, type: 2}
   - {fileID: 11400000, guid: 09f6161989b3dd6429c242d47cb14917, type: 2}
+  QuestPool:
+  - {fileID: 11400000, guid: 1d25721e42a150e40a0a04bdbe7fe2d7, type: 2}
   _habitationMax: 10
   _foodMax: 10
   _joyMax: 10
