@@ -50,7 +50,7 @@ public class MelodyQuest : Melody
     {
         if (base.ValidateInput(input))
         {
-            GameController.Instance.SetJoyMeter(JoyRegained);
+            GameController.Instance.RegainJoy(JoyRegained);
             return true;
         }
 

@@ -367,4 +367,9 @@ public sealed class GameController : MonoBehaviour
             }
         }
     }
+
+    public void RegainJoy(float value)
+    {
+        Mathf.Clamp(value, 0, _joyMax);
+    }
 }
