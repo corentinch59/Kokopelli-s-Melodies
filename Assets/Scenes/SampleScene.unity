@@ -1109,7 +1109,7 @@ MonoBehaviour:
   _habitationMax: 10
   _foodMax: 10
   _joyMax: 10
-  _joyLoseRatio: 0.2
+  _joyLoseRatio: 0.15
   _foodGainRatio: 0.2
   _HabitationGainRatio: 0.2
   _advancementFactor: 0.2
