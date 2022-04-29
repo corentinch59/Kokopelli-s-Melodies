@@ -55,6 +55,9 @@ public sealed class GameController : MonoBehaviour
     [SerializeField] private Slider _sliderHabitation;
     [SerializeField] private Slider _sliderJoy;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _note1, _note2, _note3, _note4, _note5, _note6;
 
     private float _advancementValue = 1.0f;
     private float _innerTimer;
@@ -137,6 +140,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('e');
                 Debug.Log("e");
+                _audioSource.PlayOneShot(_note1);
             }
             
         }
@@ -152,6 +156,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('r');
                 Debug.Log("r");
+                _audioSource.PlayOneShot(_note2);
             }
         }
         
@@ -161,6 +166,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('t');
                 Debug.Log("t");
+                _audioSource.PlayOneShot(_note3);
             }
         }
 
@@ -170,6 +176,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('y');
                 Debug.Log("y");
+                _audioSource.PlayOneShot(_note4);
             }
         }
 
@@ -179,6 +186,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('u');
                 Debug.Log("u");
+                _audioSource.PlayOneShot(_note5);
             }
         }
 
