@@ -4,6 +4,9 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 public enum PlayState
 {
@@ -54,7 +57,12 @@ public sealed class GameController : MonoBehaviour
     [SerializeField] private Slider _sliderFood;
     [SerializeField] private Slider _sliderHabitation;
     [SerializeField] private Slider _sliderJoy;
-
+    [SerializeField] private TMP_Text counterText;
+    public Image Bouton1Image;
+    public Image Bouton2Image;
+    public Image Bouton3Image;
+    public Image Bouton4Image;
+    public Image Bouton5Image;
 
     private float _advancementValue = 1.0f;
     private float _innerTimer;
@@ -62,6 +70,7 @@ public sealed class GameController : MonoBehaviour
     private bool _isFoodDepleting = false;
     private bool _isHabitationDepleting = false;
     private bool _isBlowing;
+    private int _dayCounter = 1;
 
     private void Awake()
     {
@@ -138,9 +147,14 @@ public sealed class GameController : MonoBehaviour
                 _inputList.Add('e');
                 Debug.Log("e");
             }
-            
+            Bouton1Image.color = new Color32(0,0,255,255);
         }
-        
+
+        if (Input.GetKeyUp("e"))
+        {
+            Bouton1Image.color = Color.white;
+        }
+
         if (Input.GetKeyDown("r"))
         {
             if (_gameState == GameState.Play)
@@ -153,8 +167,14 @@ public sealed class GameController : MonoBehaviour
                 _inputList.Add('r');
                 Debug.Log("r");
             }
+            Bouton2Image.color = new Color32(255,0,255,255);
         }
-        
+
+        if (Input.GetKeyUp("r"))
+        {
+            Bouton2Image.color = Color.white;
+        }
+
         if (Input.GetKeyDown("t"))
         {
             if (_gameState == GameState.Event && _isBlowing || _gameState == GameState.Quest && _isBlowing)
@@ -162,6 +182,12 @@ public sealed class GameController : MonoBehaviour
                 _inputList.Add('t');
                 Debug.Log("t");
             }
+            Bouton3Image.color = new Color32(255, 0, 0, 255);
+        }
+
+        if (Input.GetKeyUp("t"))
+        {
+            Bouton3Image.color = Color.white;
         }
 
         if (Input.GetKeyDown("y"))
@@ -171,6 +197,12 @@ public sealed class GameController : MonoBehaviour
                 _inputList.Add('y');
                 Debug.Log("y");
             }
+            Bouton4Image.color = new Color32(255, 255, 0, 255);
+        }
+
+        if (Input.GetKeyUp("y"))
+        {
+            Bouton4Image.color = Color.white;
         }
 
         if (Input.GetKeyDown("u"))
@@ -180,6 +212,12 @@ public sealed class GameController : MonoBehaviour
                 _inputList.Add('u');
                 Debug.Log("u");
             }
+            Bouton5Image.color = new Color32(0, 255, 0, 255);
+        }
+
+        if (Input.GetKeyUp("u"))
+        {
+            Bouton5Image.color = Color.white;
         }
 
         if (_blowTimer < 0)
@@ -240,9 +278,64 @@ public sealed class GameController : MonoBehaviour
                         _questsList.RemoveAt(0);
                     }
                     _inputList.Clear();
+                    Bouton1Image.color = Color.white;
+                    Bouton2Image.color = Color.white;
+                    Bouton3Image.color = Color.white;
+                    Bouton4Image.color = Color.white;
+                    Bouton5Image.color = Color.white;
                     _gameState = GameState.Play;
                     Debug.Log("Switched GameState to Play");
                 }
+
+                switch (_questsList[0].EventMelody.MelodyNotes[_inputList.Count])
+                {
+                    case 'e':
+                    {
+                        Bouton1Image.color = new Color32(255, 0, 255, 255);
+                        Bouton2Image.color = Color.white;
+                        Bouton3Image.color = Color.white;
+                        Bouton4Image.color = Color.white;
+                        Bouton5Image.color = Color.white;
+                        break;
+                    }
+                    case 'r':
+                    {
+                        Bouton1Image.color = Color.white;
+                        Bouton2Image.color = new Color32(255, 0, 255, 255);
+                        Bouton3Image.color = Color.white;
+                        Bouton4Image.color = Color.white;
+                        Bouton5Image.color = Color.white;
+                        break;
+                    }
+                    case 't':
+                    {
+                        Bouton1Image.color = Color.white;
+                        Bouton2Image.color = Color.white;
+                        Bouton3Image.color = new Color32(255, 0, 255, 255);
+                        Bouton4Image.color = Color.white;
+                        Bouton5Image.color = Color.white;
+                        break;
+                    }
+                    case 'y':
+                    {
+                        Bouton1Image.color = Color.white;
+                        Bouton2Image.color = Color.white;
+                        Bouton3Image.color = Color.white;
+                        Bouton4Image.color = new Color32(255, 0, 255, 255);
+                        Bouton5Image.color = Color.white;
+                        break;
+                    }
+                    case 'u':
+                    {
+                        Bouton1Image.color = Color.white;
+                        Bouton2Image.color = Color.white;
+                        Bouton3Image.color = Color.white;
+                        Bouton4Image.color = Color.white;
+                        Bouton5Image.color = new Color32(255, 0, 255, 255);
+                        break;
+                    }
+                }
+
                 break;
             }
         }
@@ -304,6 +397,8 @@ public sealed class GameController : MonoBehaviour
                 if((int)_advancementValue < 2)
                     _advancementValue += _advancementFactor;
                 _innerTimer = 5.0f;
+                _dayCounter += 1;
+                counterText.SetText(_dayCounter.ToString());
                 break;
             }
             case PlayState.EventState:
@@ -320,7 +415,7 @@ public sealed class GameController : MonoBehaviour
             case PlayState.AnswerState:
             {
                 //Debug.Log("Entering Answer state");
-                _innerTimer = 15.0f;
+                _innerTimer = 20.0f;
                 break;
             }
             default:
@@ -335,6 +430,8 @@ public sealed class GameController : MonoBehaviour
     public void SetJoyMeter(float value)
     {
         JoyMeter += value;
+        if (JoyMeter > _joyMax)
+            JoyMeter = _joyMax;
     }
 
     public void PickQuest()
@@ -368,8 +465,8 @@ public sealed class GameController : MonoBehaviour
         }
     }
 
-    public void RegainJoy(float value)
+    public void RestartGame()
     {
-        Mathf.Clamp(value, 0, _joyMax);
+        SceneManager.LoadScene("SampleScene");
     }
 }

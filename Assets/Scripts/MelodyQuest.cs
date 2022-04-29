@@ -8,7 +8,7 @@ public class MelodyQuest : Melody
 {
     private List<char> Charlist = new List<char>();
 
-    private float JoyRegained = 3.5f;
+    private float JoyRegained = 1.5f;
 
     //private void Start()
     //{
@@ -50,7 +50,7 @@ public class MelodyQuest : Melody
     {
         if (base.ValidateInput(input))
         {
-            GameController.Instance.RegainJoy(JoyRegained);
+            GameController.Instance.SetJoyMeter(JoyRegained);
             return true;
         }
 
