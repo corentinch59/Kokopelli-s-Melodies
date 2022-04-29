@@ -72,16 +72,21 @@ public class Melody : MonoBehaviour
     public virtual bool ValidateInput(List<char> input)
     {
         if (input.Count != MelodyNotes.Count)
+        {
+            Debug.Log("Input count doesn't match");
             return false;
+        }
 
         for (int i = 0; i < MelodyNotes.Count; ++i)
         {
             if (input[i] != MelodyNotes[i])
             {
+                Debug.Log("An input doesn't match");
                 return false;
             }
         }
 
+        Debug.Log("Input Validated");
         return true;
     }
 

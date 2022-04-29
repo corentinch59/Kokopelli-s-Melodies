@@ -8,7 +8,7 @@ public class MelodyQuest : Melody
 {
     private List<char> Charlist = new List<char>();
 
-    private float JoyRegained;
+    private float JoyRegained = 3.5f;
 
     //private void Start()
     //{
