@@ -510,6 +510,6 @@ public sealed class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("MainMenu");
+        Application.Quit();
     }
 }
