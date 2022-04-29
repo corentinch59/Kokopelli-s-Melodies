@@ -57,12 +57,18 @@ public sealed class GameController : MonoBehaviour
     [SerializeField] private Slider _sliderFood;
     [SerializeField] private Slider _sliderHabitation;
     [SerializeField] private Slider _sliderJoy;
-    [SerializeField] private TMP_Text counterText;
+    [SerializeField] private TMP_Text _counterText;
+    [SerializeField] private TMP_Text _gameovercounterText;
+    [SerializeField] private GameObject _gameOverOverlay;
     public Image Bouton1Image;
     public Image Bouton2Image;
     public Image Bouton3Image;
     public Image Bouton4Image;
     public Image Bouton5Image;
+    public GameObject EventRainImage;
+    public GameObject EventLoveImage;
+    public GameObject EventHealthImage;
+    public GameObject EventSunImage;
 
     private float _advancementValue = 1.0f;
     private float _innerTimer;
@@ -128,6 +134,7 @@ public sealed class GameController : MonoBehaviour
         }
 
         PickQuest();
+        _gameOverOverlay.SetActive(false);
     }
 
     private void Update()
@@ -353,11 +360,40 @@ public sealed class GameController : MonoBehaviour
 
         float precedentFoodMeter = FoodMeter;
         float precedentHabitationMeter = FoodMeter;
-        
+
+        EventRainImage.SetActive(false);
+        EventLoveImage.SetActive(false);
+        EventHealthImage.SetActive(false);
+        EventSunImage.SetActive(false);
+
         for (int i = 0; i < _eventsList.Count; ++i)
         {
             FoodMeter -= _eventsList[i].FoodValue * Time.deltaTime;
             HabitationMeter -= _eventsList[i].HabitationValue * Time.deltaTime;
+
+            switch (_eventsList[i].IncantationType)
+            {
+                case IncantationType.Rain:
+                {
+                    EventRainImage.SetActive(true);
+                    break;
+                }
+                case IncantationType.Love:
+                {
+                    EventLoveImage.SetActive(true);
+                    break;
+                }
+                case IncantationType.Health:
+                {
+                    EventHealthImage.SetActive(true);
+                    break;
+                }
+                case IncantationType.Sun:
+                {
+                    EventSunImage.SetActive(true);
+                    break;
+                }
+            }
         }
 
         if (precedentFoodMeter != FoodMeter)
@@ -385,6 +421,13 @@ public sealed class GameController : MonoBehaviour
         _sliderFood.value = FoodMeter / _foodMax;
         _sliderHabitation.value = HabitationMeter / _habitationMax;
         _sliderJoy.value = JoyMeter / _joyMax;
+
+        if (FoodMeter <= 0 || HabitationMeter <= 0 || JoyMeter <= 0)
+        {
+            Time.timeScale = 0;
+            _gameOverOverlay.SetActive(true);
+            _gameovercounterText.SetText(_dayCounter.ToString());
+        }
     }
 
     private void UpdatePlayState()
@@ -398,7 +441,7 @@ public sealed class GameController : MonoBehaviour
                     _advancementValue += _advancementFactor;
                 _innerTimer = 5.0f;
                 _dayCounter += 1;
-                counterText.SetText(_dayCounter.ToString());
+                _counterText.SetText(_dayCounter.ToString());
                 break;
             }
             case PlayState.EventState:
@@ -467,6 +510,6 @@ public sealed class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("MainMenu");
     }
 }
