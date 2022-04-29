@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 
 public enum PlayState
@@ -69,6 +65,7 @@ public sealed class GameController : MonoBehaviour
     public GameObject EventLoveImage;
     public GameObject EventHealthImage;
     public GameObject EventSunImage;
+    public GameObject ActiveEventImage;
 
     private float _advancementValue = 1.0f;
     private float _innerTimer;
@@ -77,6 +74,11 @@ public sealed class GameController : MonoBehaviour
     private bool _isHabitationDepleting = false;
     private bool _isBlowing;
     private int _dayCounter = 1;
+    private GameState _oldState;
+
+    [Header("Sound")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _note1, _note2, _note3, _note4, _note5, _note6;
 
     private void Awake()
     {
@@ -92,6 +94,10 @@ public sealed class GameController : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1.0f;
+
+        ActiveEventImage.SetActive(false);
+
         HabitationMeter = _habitationMax * 0.75f;
         FoodMeter = _foodMax * 0.75f;
         JoyMeter = _joyMax * 0.75f;
@@ -146,6 +152,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Clear();
                 _gameState = GameState.Event;
+                ActiveEventImage.SetActive(true);
                 Debug.Log("Switched GameState to Event");
 
             }
@@ -153,6 +160,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('e');
                 Debug.Log("e");
+                _audioSource.PlayOneShot(_note1);
             }
             Bouton1Image.color = new Color32(0,0,255,255);
         }
@@ -173,6 +181,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('r');
                 Debug.Log("r");
+                _audioSource.PlayOneShot(_note2);
             }
             Bouton2Image.color = new Color32(255,0,255,255);
         }
@@ -188,6 +197,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('t');
                 Debug.Log("t");
+                _audioSource.PlayOneShot(_note3);
             }
             Bouton3Image.color = new Color32(255, 0, 0, 255);
         }
@@ -203,6 +213,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('y');
                 Debug.Log("y");
+                _audioSource.PlayOneShot(_note4);
             }
             Bouton4Image.color = new Color32(255, 255, 0, 255);
         }
@@ -218,6 +229,7 @@ public sealed class GameController : MonoBehaviour
             {
                 _inputList.Add('u');
                 Debug.Log("u");
+                _audioSource.PlayOneShot(_note5);
             }
             Bouton5Image.color = new Color32(0, 255, 0, 255);
         }
@@ -242,11 +254,16 @@ public sealed class GameController : MonoBehaviour
         {
             if (_gameState != GameState.Pause)
             {
+                Debug.Log("Paused");
                 Time.timeScale = 0;
+                _oldState = _gameState;
+                _gameState = GameState.Pause;
             }
             else
             {
+                Debug.Log("Unpaused");
                 Time.timeScale = 1;
+                _gameState = _oldState;
             }
         }
 
@@ -271,6 +288,7 @@ public sealed class GameController : MonoBehaviour
                     }
                     _inputList.Clear();
                     _gameState = GameState.Play;
+                    ActiveEventImage.SetActive(false);
                     Debug.Log("Switched GameState to Play");
                 }
                 break;
@@ -294,52 +312,55 @@ public sealed class GameController : MonoBehaviour
                     Debug.Log("Switched GameState to Play");
                 }
 
-                switch (_questsList[0].EventMelody.MelodyNotes[_inputList.Count])
+                if (_questsList.Count != 0)
                 {
-                    case 'e':
+                    switch (_questsList[0].EventMelody.MelodyNotes[_inputList.Count])
                     {
-                        Bouton1Image.color = new Color32(255, 0, 255, 255);
-                        Bouton2Image.color = Color.white;
-                        Bouton3Image.color = Color.white;
-                        Bouton4Image.color = Color.white;
-                        Bouton5Image.color = Color.white;
-                        break;
-                    }
-                    case 'r':
-                    {
-                        Bouton1Image.color = Color.white;
-                        Bouton2Image.color = new Color32(255, 0, 255, 255);
-                        Bouton3Image.color = Color.white;
-                        Bouton4Image.color = Color.white;
-                        Bouton5Image.color = Color.white;
-                        break;
-                    }
-                    case 't':
-                    {
-                        Bouton1Image.color = Color.white;
-                        Bouton2Image.color = Color.white;
-                        Bouton3Image.color = new Color32(255, 0, 255, 255);
-                        Bouton4Image.color = Color.white;
-                        Bouton5Image.color = Color.white;
-                        break;
-                    }
-                    case 'y':
-                    {
-                        Bouton1Image.color = Color.white;
-                        Bouton2Image.color = Color.white;
-                        Bouton3Image.color = Color.white;
-                        Bouton4Image.color = new Color32(255, 0, 255, 255);
-                        Bouton5Image.color = Color.white;
-                        break;
-                    }
-                    case 'u':
-                    {
-                        Bouton1Image.color = Color.white;
-                        Bouton2Image.color = Color.white;
-                        Bouton3Image.color = Color.white;
-                        Bouton4Image.color = Color.white;
-                        Bouton5Image.color = new Color32(255, 0, 255, 255);
-                        break;
+                        case 'e':
+                        {
+                            Bouton1Image.color = new Color32(255, 0, 255, 255);
+                            Bouton2Image.color = Color.white;
+                            Bouton3Image.color = Color.white;
+                            Bouton4Image.color = Color.white;
+                            Bouton5Image.color = Color.white;
+                            break;
+                        }
+                        case 'r':
+                        {
+                            Bouton1Image.color = Color.white;
+                            Bouton2Image.color = new Color32(255, 0, 255, 255);
+                            Bouton3Image.color = Color.white;
+                            Bouton4Image.color = Color.white;
+                            Bouton5Image.color = Color.white;
+                            break;
+                        }
+                        case 't':
+                        {
+                            Bouton1Image.color = Color.white;
+                            Bouton2Image.color = Color.white;
+                            Bouton3Image.color = new Color32(255, 0, 255, 255);
+                            Bouton4Image.color = Color.white;
+                            Bouton5Image.color = Color.white;
+                            break;
+                        }
+                        case 'y':
+                        {
+                            Bouton1Image.color = Color.white;
+                            Bouton2Image.color = Color.white;
+                            Bouton3Image.color = Color.white;
+                            Bouton4Image.color = new Color32(255, 0, 255, 255);
+                            Bouton5Image.color = Color.white;
+                            break;
+                        }
+                        case 'u':
+                        {
+                            Bouton1Image.color = Color.white;
+                            Bouton2Image.color = Color.white;
+                            Bouton3Image.color = Color.white;
+                            Bouton4Image.color = Color.white;
+                            Bouton5Image.color = new Color32(255, 0, 255, 255);
+                            break;
+                        }
                     }
                 }
 
@@ -510,6 +531,7 @@ public sealed class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        Application.Quit();
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene("SampleScene");
     }
 }
