@@ -236,7 +236,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.572, y: 0.47500002}
   m_AnchorMax: {x: 0.572, y: 0.47500002}
-  m_AnchoredPosition: {x: -0.78500366, y: -0.34999847}
+  m_AnchoredPosition: {x: -218, y: 103}
   m_SizeDelta: {x: 438.43, y: 62.699997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &244448233
@@ -466,7 +466,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.572, y: 0.37585944}
   m_AnchorMax: {x: 0.572, y: 0.37585944}
-  m_AnchoredPosition: {x: -0.78500366, y: 1}
+  m_AnchoredPosition: {x: -218.00002, y: 104.349976}
   m_SizeDelta: {x: 438.43, y: 62.699997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &478903063
@@ -717,7 +717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.572, y: 0.27923962}
   m_AnchorMax: {x: 0.572, y: 0.27923962}
-  m_AnchoredPosition: {x: 0.000030517578, y: -1}
+  m_AnchoredPosition: {x: -217.21498, y: 102.349976}
   m_SizeDelta: {x: 438.43, y: 62.699997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &756765886
@@ -1103,18 +1103,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EventPool:
   - {fileID: 11400000, guid: a5179c94ad6447849b78abc2d3c11c61, type: 2}
-  - {fileID: 11400000, guid: 1d25721e42a150e40a0a04bdbe7fe2d7, type: 2}
   - {fileID: 11400000, guid: 09f6161989b3dd6429c242d47cb14917, type: 2}
+  QuestPool:
+  - {fileID: 11400000, guid: 1d25721e42a150e40a0a04bdbe7fe2d7, type: 2}
   _habitationMax: 10
   _foodMax: 10
   _joyMax: 10
-  _joyLoseRatio: 0.2
+  _joyLoseRatio: 0.15
   _foodGainRatio: 0.2
   _HabitationGainRatio: 0.2
+  _advancementFactor: 0.2
   _sliderFood: {fileID: 244448233}
   _sliderHabitation: {fileID: 478903063}
   _sliderJoy: {fileID: 756765886}
-  _advancementFactor: 0.2
 --- !u!4 &1454048955
 Transform:
   m_ObjectHideFlags: 0

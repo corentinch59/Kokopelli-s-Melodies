@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 021a4f7c974289e47be5f6ae6732956b, type: 3}
-  m_Name: FloodEvent
+  m_Name: AnimauxFroid
   m_EditorClassIdentifier: 
-  EventDuration: 0
+  EventType: 1
+  IncantationType: 2
   HabitationValue: 0
-  FoodValue: 0
-  JoyValue: 0
-  EventName: A flood is ravaging the lands
+  FoodValue: 0.2
+  EventName: Animaux qui ont Froid
+  EventMelody: {fileID: 0}

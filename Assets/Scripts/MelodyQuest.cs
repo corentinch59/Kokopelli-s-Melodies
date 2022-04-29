@@ -7,19 +7,53 @@ using Random = UnityEngine.Random;
 public class MelodyQuest : Melody
 {
     private List<char> Charlist = new List<char>();
-    private void Start()
+
+    private float JoyRegained = 3.5f;
+
+    //private void Start()
+    //{
+    //    MelodyNotes.Clear();
+
+    //    Charlist.Add('a');
+    //    Charlist.Add('b');
+    //    Charlist.Add('c');
+    //    Charlist.Add('d');
+        
+
+    //    for (int i = 0; i < 5; ++i)
+    //    {
+    //        int newRand = Random.Range(0, Charlist.Count);
+    //        MelodyNotes.Add(Charlist[newRand]);
+    //    }
+    //}
+
+    public MelodyQuest(IncantationType incant) : base(incant)
     {
-        Charlist.Add('a');
-        Charlist.Add('b');
-        Charlist.Add('c');
-        Charlist.Add('d');
+        Incantation = IncantationType.None;
+        MelodyNotes.Clear();
 
-        int rand = Random.Range(3, 6);
+        Charlist.Add('e');
+        Charlist.Add('r');
+        Charlist.Add('t');
+        Charlist.Add('y');
+        Charlist.Add('u');
 
-        for (int i = 0; i < rand; ++i)
+
+        for (int i = 0; i < 5; ++i)
         {
             int newRand = Random.Range(0, Charlist.Count);
-            MelodyNotes.Add(Charlist[rand]);
+            MelodyNotes.Add(Charlist[newRand]);
         }
+    }
+
+    public override bool ValidateInput(List<char> input)
+    {
+        if (base.ValidateInput(input))
+        {
+            GameController.Instance.SetJoyMeter(JoyRegained);
+            return true;
+        }
+
+        return false;
     }
 }

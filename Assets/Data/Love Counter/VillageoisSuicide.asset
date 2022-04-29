@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 021a4f7c974289e47be5f6ae6732956b, type: 3}
-  m_Name: ApacheEvent
+  m_Name: VillageoisSuicide
   m_EditorClassIdentifier: 
-  EventDuration: 0
+  EventType: 1
+  IncantationType: 4
   HabitationValue: 0.2
   FoodValue: 0
-  JoyValue: 0
-  EventName: Apache Attack
+  EventName: Villageois se suicide
+  EventMelody: {fileID: 0}

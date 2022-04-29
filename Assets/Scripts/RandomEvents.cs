@@ -11,13 +11,10 @@ public enum EventType
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/RandomEvents", order = 1)]
 public class RandomEvents : ScriptableObject
 {
-    [SerializeField] private EventType _eventType;
-
+    public EventType EventType;
+    public IncantationType IncantationType;
     public float HabitationValue;
     public float FoodValue;
     public string EventName;
-    public RandomEvents()
-    {
-
-    }
+    public Melody EventMelody;
 }
