@@ -56,6 +56,7 @@ public sealed class GameController : MonoBehaviour
     [SerializeField] private TMP_Text _counterText;
     [SerializeField] private TMP_Text _gameovercounterText;
     [SerializeField] private GameObject _gameOverOverlay;
+    [SerializeField] private GameObject _pauseUI;
     public Image Bouton1Image;
     public Image Bouton2Image;
     public Image Bouton3Image;
@@ -97,6 +98,7 @@ public sealed class GameController : MonoBehaviour
         Time.timeScale = 1.0f;
 
         ActiveEventImage.SetActive(false);
+        _pauseUI.SetActive(false);
 
         HabitationMeter = _habitationMax * 0.75f;
         FoodMeter = _foodMax * 0.75f;
@@ -258,12 +260,14 @@ public sealed class GameController : MonoBehaviour
                 Time.timeScale = 0;
                 _oldState = _gameState;
                 _gameState = GameState.Pause;
+                _pauseUI.SetActive(true);
             }
             else
             {
                 Debug.Log("Unpaused");
                 Time.timeScale = 1;
                 _gameState = _oldState;
+                _pauseUI.SetActive(false);
             }
         }
 
@@ -312,7 +316,7 @@ public sealed class GameController : MonoBehaviour
                     Debug.Log("Switched GameState to Play");
                 }
 
-                if (_questsList.Count != 0)
+                if (_questsList.Count != 0 && _inputList.Count <= _questsList[0].EventMelody.MelodyNotes.Count)
                 {
                     switch (_questsList[0].EventMelody.MelodyNotes[_inputList.Count])
                     {
@@ -380,7 +384,7 @@ public sealed class GameController : MonoBehaviour
         _blowTimer -= Time.deltaTime;
 
         float precedentFoodMeter = FoodMeter;
-        float precedentHabitationMeter = FoodMeter;
+        float precedentHabitationMeter = HabitationMeter;
 
         EventRainImage.SetActive(false);
         EventLoveImage.SetActive(false);
